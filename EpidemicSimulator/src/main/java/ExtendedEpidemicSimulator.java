@@ -10,7 +10,7 @@ import java.util.Random;
 /*
     To-do:
     [X]: 1
-    [ ]: 2
+    [X]: 2
     [X]: 3
     [X]: 4
     [ ]: 5
@@ -29,12 +29,13 @@ import java.util.Random;
 public class ExtendedEpidemicSimulator {
 
     // Total population n = 1000;
-    public static int[] N = new int[100];
+    public static int[] N = new int[1000];
+    public static int[] exposed;
 
-    public static int T = 200;
+    public static int T = 2000;
     public static int total_infected;
-    //public static double a = 0.05;
-    //public static double b = 0.03;
+    public static double a = 0.005;
+//    public static double b = 0.01;
 
     public static int min = 0;
     public static int max = N.length - 1;
@@ -47,15 +48,28 @@ public class ExtendedEpidemicSimulator {
      *
      * @param _a
      * @return positive
+     *
+     * public static int contactRate(int _ratio) { double contact = 0; double
+     * lowRate = 0; double highRate = 1; Random chance = new Random(); contact =
+     * ((highRate - lowRate) * chance.nextDouble()); _ratio = (int) (contact *
+     * (_ratio/T)* 100); //0.3 * (500/ 1000) = 0.3 * 1/2 *100 = 0.4 *
+     * System.out.println(" Rate of Contact = " + _ratio); return _ratio; }
      */
-    public static int contactRate() {
-        double positive = 0;
-        double lowRate = 0;
-        double highRate = 1;
-        Random chance = new Random();
-        positive = ((highRate - lowRate) * chance.nextDouble()) * 100;
-        System.out.println(" Rate of Contact = " + (int) positive + "%");
-        return (int) positive;
+    /**
+     * Calculate the probability of infection
+     *
+     * @param _a
+     * @return
+     */
+    public static boolean probability(double _a) {
+        //Probability of 1/(int) value
+        double _b = 0;
+        double lowRate = 0; 
+        double highRate = 1; 
+        Random b = new Random(); 
+        _b = ((highRate - lowRate) * b.nextDouble()); //
+        System.out.println("\n>>>>>>>> Chance of infection = " + _b);
+        return _b <= _a;
     }
 
     /**
@@ -63,22 +77,16 @@ public class ExtendedEpidemicSimulator {
      *
      * @param _b
      * @return false
+     *
+     * public static boolean infectRate() { // double infected = 0; // double
+     * lowRate = 0; // double highRate = 1; // Random chance = new Random(); //
+     * infected = ((highRate - lowRate) * chance.nextDouble()) * 100; //
+     * System.out.println("\n>>>>>>>> Chance of infection = " + (int) infected +
+     * "%");
+     *
+     * //if percent is more than 50%, they are infected if (probability(a)) {
+     * return true; } return false; }
      */
-    public static boolean infectRate() {
-        double infected = 0;
-        double lowRate = 0;
-        double highRate = 1;
-        Random chance = new Random();
-        infected = ((highRate - lowRate) * chance.nextDouble()) * 100;
-        System.out.println("\n>>>>>>>> Chance of infection = " + (int) infected + "%");
-
-        //if percent is more than 50%, they are infected
-        if (infected > 50) {
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Infection Status
      *
@@ -86,13 +94,16 @@ public class ExtendedEpidemicSimulator {
      * @param _infectedCount
      * @return isInfected
      */
-    public static boolean isInfected(int _person[], int _infectedCount) {
+    public static boolean isInfected(int _person[], int _exposed[], int _infectedCount) {
         boolean isInfected = false;
         int sample = _person.length - 1;
 
         //infected status
         int infected = 1;
-        int contact = contactRate();
+        int uninfected;
+
+        int contact;
+        int ratio;
         boolean infect;
 //        boolean infect = false;
 
@@ -117,17 +128,15 @@ public class ExtendedEpidemicSimulator {
                     System.out.printf("%10s %1s %-5s %9s\n", "[RI] infected[", rand, "] =", isInfected);
                     _person[rand]--;
 
-                    //contact infection             
                     //infection rate      
-                    infect = infectRate();
-                    if (infect && new_rand != rand && _person[new_rand] != _person[rand]) {
+                    if (probability(a) && new_rand != rand && _person[new_rand] != _person[rand]) {
                         isInfected = true;
                         _person[new_rand] += infected;
                         //[CI] -> Contact Infected
                         System.out.printf("%10s %1s %-5s %9s\n", "[CI] infected[", new_rand, "] =", isInfected);
                         _infectedCount++;
                         _person[new_rand]--;
-                    }
+                    } //end if
                 } else {
                     isInfected = false;
 //                    System.out.printf("%10s %1s %-5s %9s\n", "healthy[", j, "] =", isInfected);
@@ -144,6 +153,6 @@ public class ExtendedEpidemicSimulator {
 
         ExtendedEpidemicSimulator epidemic = new ExtendedEpidemicSimulator();
 
-        epidemic.isInfected(N, total_infected);
+        epidemic.isInfected(N, exposed, total_infected);
     }
 }
