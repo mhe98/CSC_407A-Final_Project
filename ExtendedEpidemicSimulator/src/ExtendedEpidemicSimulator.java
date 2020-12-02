@@ -47,7 +47,12 @@ public class ExtendedEpidemicSimulator {
         // Probability of 1/(int) value
         return new Random().nextDouble() <= b;
     }
-
+    
+    /**
+     * Simulates spread of the infection
+     * @param infected array with status of infected
+     * @param temp a temp array to keep track of days infected
+     */
     public static void totalInfected(int[] infected, int[] temp) {
         int infectedCount = 0;
         int exposedCount = 0;
