@@ -186,20 +186,6 @@ public class EpidemicPart2 {
         					}
         				}
         			}
-        			
-        			//Checks how long one has been infected and moves to immune
-            		if (temp[j][k] > 0) {
-            			temp[j][k]++;
-            			if (temp[j][k] == 5) {
-            				infected[j][k] = RECOVERED;
-                			recoveredCount[j]++;
-                			totalInfected[j]--;
-                		// Checks how long they have been immune and moves back to healthy status
-            			} else if (temp[j][k] == 20) {
-            				infected[j][k] = HEALTHY;
-                			temp[j][k] = 0;
-            			}
-            		}
             		
             		//Checks if not infected also excludes recovered (AKA immune)
             		if (!(infected[j][k] == INFECTED) && !(infected[j][k] == RECOVERED)) {
